@@ -2,7 +2,7 @@
 
 ### TODAY (Monday)
 - [X] Download curriculum (25 min)
-- [X ] Set up GitHub (10 min)
+- [X] Set up GitHub (10 min)
 - [ ] Run Assignment 1 code (5 min)
 - [ ] Pass Assignment 1 tests (10 min)
 - [ ] Read Assignment 1 documentation (20 min)
