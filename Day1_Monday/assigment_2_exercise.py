@@ -24,12 +24,11 @@ print("="*60)
 #
 # Esimerkki:
 # parse_pair("EUR/USD") → {"base": "EUR", "quote": "USD"}
-#
-# def parse_pair(pair):
-#     parts = pair.split("/")
-#     return {"base": parts[0], "quote": parts[1]}
 
-# SINÄ KIRJOITAT TÄMÄN FUNKTION!
+def parse_pair(pair):
+    parts = pair.split("/")
+    return {"base": parts[0], "quote": parts[1]}
+
 
 
 # ============================================================================
