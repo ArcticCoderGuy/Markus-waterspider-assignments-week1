@@ -7,7 +7,7 @@
 - [X] Pass Assignment 1 tests (10 min)
 - [X] Read Assignment 1 documentation (20 min)
 - [X] Modify Assignment 1 (add your own pairs) (30 min)
-- [ ] Complete Assignment 2 (3 hours) (Having a break)
+- [X] Complete Assignment 2 (3 hours) (Having a break)
 - [ ] Commit to GitHub (5 min)
 - [ ] Update WEEKLY_TRACKER.md (5 min)
 

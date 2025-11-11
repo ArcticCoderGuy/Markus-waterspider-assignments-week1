@@ -39,42 +39,15 @@ print("TEHTÄVÄ 3: For-silmukka + Funktio")
 print("="*60)
 
 # Käytä listaasi assignment_1_exercise.py:stä:
-# fx_pairs = ["EUR/USD", "GBP/USD", "USD/JPY", "AUD/USD", "CHF/USD", "SGD/USD"]
+fx_pairs = ["EUR/USD", "GBP/USD", "USD/JPY", "AUD/USD", "CHF/USD", "SGD/USD"]
 
 # TODO 3.1: Kirjoita for-silmukka joka:
 # - Iteroi listan läpi
 # - Kutsu parse_pair() jokaiselle
 # - Tulosta tulos
 #
-# for pair in fx_pairs:
-#     result = parse_pair(pair)
-#     print(f"{pair}: {result}")
+for pair in fx_pairs:
+    
+        result = parse_pair(pair)
+        print(f"{pair}: {result}")
 
-# SINÄ KIRJOITAT TÄMÄN!
-
-
-# ============================================================================
-# SUMMARY
-# ============================================================================
-print("\n" + "="*60)
-print("VALMIS!")
-print("="*60)
-```
-
----
-
-## 🎯 **SEURAAVA ASKEL (nyt):**
-
-**VS Code:ssa:**
-
-1. **Liitä pohja** (Ctrl+V)
-2. **Ctrl+S** → nimeä: `assignment_2_exercise.py`
-3. **Tallenna Day1_Monday:iin**
-
----
-
-## ✅ **VALMIUDEN MERKKI:**
-
-Kun tiedosto luotu ja tallennettu, kerro:
-```
-"assignment_2_exercise.py luotu Day1_Monday:iin!"
