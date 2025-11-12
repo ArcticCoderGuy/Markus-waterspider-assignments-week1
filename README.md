@@ -22,6 +22,7 @@
 - **FIRST LIVE TEST WITH PUPRIME** ⚡
 - 7 hours coding + live validation
 - Made a Week 1 architecture-plan to Day3_Wednesday folder named: WATERSPIDER_WEEK1_ARCHITECTURE.md 
+- Added To-Do_week_46-47 markdown file
 
 ### THURSDAY
 - Follow HOW_TO_USE_CURRICULUM.md for Assignments 7-8
