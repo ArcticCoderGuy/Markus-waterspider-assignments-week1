@@ -21,6 +21,7 @@
 - Follow HOW_TO_USE_CURRICULUM.md for Assignments 5-6
 - **FIRST LIVE TEST WITH PUPRIME** ⚡
 - 7 hours coding + live validation
+- Made a Week 1 architecture-plan to Day3_Wednesday folder named: WATERSPIDER_WEEK1_ARCHITECTURE.md 
 
 ### THURSDAY
 - Follow HOW_TO_USE_CURRICULUM.md for Assignments 7-8
@@ -30,4 +31,4 @@
 - Follow HOW_TO_USE_CURRICULUM.md for Assignments 9-10
 - **LIVE DEMO WITH PUPRIME DATA** ⚡⚡
 - Fill FRIDAY_EPIPHANY_CHECKLIST.md
-- 8 hours final integration + proof
+- 8 hours final integration + proofgit add
