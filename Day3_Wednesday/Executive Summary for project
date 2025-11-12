@@ -1,0 +1,163 @@
+# WATERSPIDER - WEEK 1 ARCHITECTURE
+
+## 1. EXECUTIVE SUMMARY
+
+**Objective:** Deploy Mikrobot for EUR/USD algorithmic trading on IconFX platform
+
+**Timeline:** Tuesday - Friday
+
+**Success Criteria:**
+- Friday week 47: Live trading EUR/USD with price-action strategy
+- Demo CEO Mark/IconFX: Real pips moving in live account
+- Architecture: Scalable to 10 accounts × 5000€
+- https://iconfx.com/
+
+---
+
+# 2. SYSTEM ARCHITECTURE
+
+## Waterspider Generic 3-Layer Pattern
+
+**Concept:** Based on Tesla One unified platform - single deterministic framework powering multiple processes (trading, invoicing, HR, customer sync, etc)
+
+---
+
+## 2.1 Architecture Overview
+```
+┌──────────────────────────────┐
+│   Data Source (MT5/IconFX)   │
+└────────────┬─────────────────┘
+             │
+             ↓ INPUT LAYER
+    ┌────────────────────────┐
+    │ Data Ingestion         │
+    │ Parsing & Validation   │
+    └────────┬───────────────┘
+             │
+             ↓ PROCESSING LAYER
+    ┌────────────────────────┐
+    │ Determinism Engine     │
+    │ Signal Generation      │
+    │ Risk Calculation       │
+    │ State Management       │
+    └────────┬───────────────┘
+             │
+             ↓ OUTPUT LAYER
+    ┌────────────────────────┐
+    │ Order Creation         │
+    │ Action Execution       │
+    │ Monitoring & Logging   │
+    └────────────────────────┘
+```
+
+---
+
+## 2.2 Layer 1: INPUT
+
+**Purpose:** Ingest real-time market data from broker and normalize for processing
+
+| Aspect | Detail |
+|--------|--------|
+| **WHY** | All decisions require accurate, real-time data; single normalization point eliminates downstream inconsistencies |
+| **INPUT** | OHLC bars (M5), Bid/Ask spreads, Account balance, Open positions |
+| **PROCESS** | Parse market data from MT5 terminal → Validate completeness → Normalize format → Store in memory buffer |
+| **OUTPUT** | Normalized data dict: `{"symbol": "EUR/USD", "ohlc": {...}, "bid": 1.1050, "ask": 1.1052, "balance": 5000}` |
+| **ERROR HANDLING** | Missing data → log warning, retry; Connection loss → trigger reconnection logic |
+| **SCALABILITY** | Single input layer serves multiple Waterspider instances (future: 10 accounts) |
+
+---
+
+## 2.3 Layer 2: PROCESSING
+
+**Purpose:** Apply deterministic logic to generate validated signals and risk parameters
+
+| Aspect | Detail |
+|--------|--------|
+| **WHY** | Determinism requires consistent, rule-based processing; removes emotion, ensures repeatability |
+| **INPUT** | Normalized data from Layer 1 + historical bars (for MA calculation) + trend validation |
+| **PROCESS** | Execute signal generation algorithm (3-layer validation) → Calculate confidence score → Apply risk rules → Generate order parameters (SL/TP/size) |
+| **OUTPUT** | Signal object: `{"action": "BUY/SELL/HOLD", "confidence": 0.0-1.0, "sl": price, "tp": price, "risk_amount": €, "position_size": lots}` |
+| **ERROR HANDLING** | Invalid signal confidence → reject trade; Risk exceeds limit → adjust position size or hold; Conflicting signals → default to HOLD |
+| **STATE MANAGEMENT** | Maintains order book, position tracking, trade history in memory with periodic snapshots |
+
+---
+
+## 2.4 Layer 3: OUTPUT
+
+**Purpose:** Execute validated orders on broker and maintain live monitoring
+
+| Aspect | Detail |
+|--------|--------|
+| **WHY** | Isolated execution layer ensures clean separation between decision logic and broker coupling; enables future broker switching |
+| **INPUT** | Order object from Layer 2 + broker API credentials |
+| **PROCESS** | Format order per broker API spec → Send to broker → Await confirmation → Log execution → Monitor position until close condition |
+| **OUTPUT** | Order confirmation: `{"orderId": 12345, "status": "OPEN", "entry_price": 1.1050, "timestamp": "2025-11-12T10:05:00Z"}` |
+| **ERROR HANDLING** | Order rejection → retry with adjusted parameters; API timeout → exponential backoff; Partial fill → monitor remainder |
+| **MONITORING** | Continuous position monitoring; trigger close on SL/TP hit; log all trades for audit trail |
+
+---
+
+## 2.5 Data Flow (Concrete Example)
+```
+10:05:00 - M5 bar closes (EUR/USD)
+
+[LAYER 1] INPUT
+  MT5 sends: {"open": 1.1050, "high": 1.1055, "low": 1.1048, "close": 1.1052, "bid": 1.1050, "ask": 1.1052}
+  Output: Normalized data ready
+
+[LAYER 2] PROCESSING
+  Input: OHLC + bid/ask
+  Analysis: Signal generator → Confidence: 0.85
+  Decision: BUY EUR/USD, SL=1.1025, TP=1.1110, Risk=100€
+  Output: Order object created
+
+[LAYER 3] OUTPUT
+  Execution: POST to broker → orderId: 12345
+  Monitoring: Track position
+  Result: OPEN position logged
+```
+
+---
+
+## 2.6 Broker Integration
+
+**Current (MVP):** MT5 EA integration
+- Data source: MT5 real-time terminal
+- Order execution: MT5 OrderSend()
+- Timeline: Week 47
+
+**Future (Scaling):** IconFX REST API integration
+- Data source: IconFX REST API endpoints
+- Order execution: POST /api/trade
+- Architecture remains identical (Layer abstraction)
+
+---
+
+## 2.7 Scalability Design
+
+Single Waterspider instance → scales to:
+- Multiple accounts (same strategy, different credentials)
+- Multiple symbols (EUR/USD, GBP/USD, etc)
+- Multiple processes (trading, invoicing, HR via FoxIPaaS)
+
+Generic 3-layer pattern repeatable for all future use cases.
+
+---
+
+## 2.8 Navigation - Next Steps
+
+✓ Architecture defined  
+? IconFX API endpoints required  
+→ Risk matrix specification needed  
+! Scaling strategy: 10 accounts setup
+
+---
+
+## 🧭 **NAVIGATION - MINÄ OHJAAN:**
+
+Kun olet valmis osalla, sanon:
+```
+✓ Hyvä struktuuri
+? Missä IconFX API endpoints?
+→ Lisää risk matrix tähän
+! Huomio: Scaling strategy puuttuu

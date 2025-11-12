@@ -1,0 +1,48 @@
+## 2.10 Implementation TO-DO List
+
+### Phase 1: Architecture Validation (TODAY)
+- [ ] Waterspider/Mikrobot separation confirmed
+- [ ] Data flow diagram reviewed
+- [ ] Layer responsibilities validated
+- [ ] Risk matrix defined
+
+### Phase 2: Assignment 3 - Signal Generator (TUESDAY)
+- [ ] Create signal_generator() function
+- [ ] Input: OHLC M5 data
+- [ ] Output: Signal with confidence score
+- [ ] Integration: Waterspider PROCESSING layer
+- [ ] Test: Unit test with sample data
+
+### Phase 3: Assignment 4 - Risk Manager (TUESDAY-WED)
+- [ ] Create risk_manager() function
+- [ ] Input: Signal + entry price
+- [ ] Output: SL/TP/position_size
+- [ ] Formula: SL = trend_line - 20pips, TP = 2:1 ratio
+- [ ] Integration: Waterspider PROCESSING layer
+
+### Phase 4: Assignment 5-6 - Execution Engine (WEDNESDAY)
+- [ ] Create order_executor() function
+- [ ] Mikrobot INPUT: MT5 data fetch
+- [ ] Mikrobot OUTPUT: MT5 OrderSend()
+- [ ] Integration test: Waterspider → Mikrobot
+- [ ] **LIVE TEST on IconFX** ⚡
+
+### Phase 5: Assignment 7-8 - State & Monitoring (THURSDAY)
+- [ ] Position tracking
+- [ ] Trade logging
+- [ ] Error handling & recovery
+- [ ] Production-ready code
+
+### Phase 6: Assignment 9-10 - Full Integration (FRIDAY)
+- [ ] All layers integrated
+- [ ] Mikrobot trading EUR/USD live
+- [ ] **DEMO to Mark** ⚡⚡
+- [ ] Scalability validation (10 accounts concept)
+
+### Critical Questions To Resolve
+- [ ] IconFX API endpoints documented?
+- [ ] MT5 data format finalized?
+- [ ] Trend line calculation method confirmed?
+- [ ] Risk parameters (0.5% rule) locked?
+```
+
