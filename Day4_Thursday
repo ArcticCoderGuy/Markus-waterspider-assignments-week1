@@ -1,0 +1,117 @@
+## 2.9 Ant-Trader Template Architecture
+
+### Goal
+Single template code → scales to Triage (7 FX + NAS100 + BTC/ETH)
+
+### Design Pattern
+```
+┌─────────────────────────────────┐
+│   Ant-Trader Template Code      │
+│   (Parametrized, reusable)      │
+└─────────────────────────────────┘
+         ↓
+    ┌────┴────┬────────┬─────────┐
+    │          │        │         │
+┌───▼──┐ ┌────▼──┐ ┌────▼──┐ ┌──▼────┐
+│EURUSD│ │GBPUSD │ │NAS100 │ │BTC/USD│
+│Config│ │Config │ │Config │ │Config │
+└──────┘ └───────┘ └───────┘ └───────┘
+    │          │        │         │
+    └────┬────┴────┬────┴────────┘
+         │         │
+      ┌──▼──┐   ┌──▼──────┐
+      │Exec │   │Waterspider
+      │Loop │   │(ML tuning)
+      └─────┘   └──────────┘
+```
+
+### Template Components
+
+**1. Core Algorithm (Same for all pairs):**
+```python
+# market_structure.py (UNCHANGED)
+# risk_management.py (UNCHANGED)
+# broker_iconfx.py (UNCHANGED)
+# logger.py (UNCHANGED)
+```
+
+**2. Config System (PER-PAIR):**
+```python
+# config_eurusd.py
+pair = "EURUSD"
+stop_pips = 12
+tp_pips = 3
+risk_pct = 0.005
+session_start = "08:00"
+session_end = "21:00"
+spread_max = 1.2
+
+# config_gbpusd.py
+pair = "GBPUSD"
+stop_pips = 15        ← Different!
+tp_pips = 4           ← Different!
+risk_pct = 0.005      ← Same!
+session_start = "08:00"
+session_end = "20:00" ← Different (less liquid)!
+spread_max = 1.5      ← Different!
+
+# config_nas100.py
+pair = "NAS100"
+stop_pips = 30        ← Bigger moves!
+tp_pips = 8           ← Bigger targets!
+risk_pct = 0.005      ← Same!
+```
+
+**3. Run Template:**
+```python
+# run_ant_trader.py
+import sys
+from config import load_config
+from market_structure import *
+from risk_management import *
+from broker_iconfx import *
+from logger import *
+
+def main(config_file):
+    config = load_config(config_file)
+    
+    # Same algorithm
+    # Different parameters
+    # Different pair
+    # Different profile!
+    
+    bot = AntTrader(config)
+    bot.run_loop()
+
+if __name__ == "__main__":
+    config_file = sys.argv[1]  # "config_eurusd.py" or "config_gbpusd.py"
+    main(config_file)
+```
+
+**4. Waterspider Optimization Point:**
+```python
+# waterspider_tuner.py (FUTURE)
+def suggest_parameters(pair, historical_trades):
+    """
+    Waterspider analyzes trade history
+    Returns optimized parameters per pair
+    """
+    eurusd_trades = historical_trades[pair]
+    
+    # ML analysis
+    optimal_stop = ml_model.predict_stop(eurusd_trades)
+    optimal_tp = ml_model.predict_tp(eurusd_trades)
+    optimal_session = ml_model.predict_session(eurusd_trades)
+    
+    return {
+        "stop_pips": optimal_stop,
+        "tp_pips": optimal_tp,
+        "session_start": optimal_session["start"],
+        "session_end": optimal_session["end"],
+        "confidence": 0.87
+    }
+
+# Usage
+config_eurusd = suggest_parameters("EURUSD", trades_history)
+update_config("config_eurusd.py", config_eurusd)
+```
